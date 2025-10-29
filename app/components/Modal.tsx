@@ -97,7 +97,10 @@ export default function Modal({
       >
         {/* Header */}
         <div className="flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 bg-gray-50">
-          <h2 id="modal-title" className="text-lg sm:text-xl font-semibold text-gray-900">
+          <h2
+            id="modal-title"
+            className="text-lg sm:text-xl font-semibold text-gray-900"
+          >
             {title}
           </h2>
           <Button

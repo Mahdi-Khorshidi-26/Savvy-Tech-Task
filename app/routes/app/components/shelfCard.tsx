@@ -71,7 +71,9 @@ export default function ShelfCard({
               💾
             </Button>
           </saveShelfFetcher.Form>
-          <p className="text-white/90 text-sm">Created at: {shelf.createdAt.toLocaleDateString()}</p>
+          <p className="text-white/90 text-sm">
+            Created at: {shelf.createdAt.toLocaleDateString()}
+          </p>
           {saveShelfFetcher.data?.errors?.shelfName && (
             <ErrorMessage
               variant="error"
@@ -142,7 +144,7 @@ export default function ShelfCard({
                 + Add Item
               </Button>
             </div>
-            
+
             {/* Desktop Table View */}
             <div className="hidden lg:block overflow-x-auto">
               <table className="w-full">
@@ -303,7 +305,9 @@ export default function ShelfCard({
                   >
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex-1">
-                        <h4 className="font-medium text-gray-900 text-lg">{item.name}</h4>
+                        <h4 className="font-medium text-gray-900 text-lg">
+                          {item.name}
+                        </h4>
                         <p className="text-sm text-gray-500">
                           Created: {item.createdAt.toLocaleDateString()}
                         </p>
@@ -312,11 +316,13 @@ export default function ShelfCard({
                         {item.category}
                       </span>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-3 mb-3 text-sm">
                       <div>
                         <span className="text-gray-500">Quantity:</span>
-                        <p className="font-medium">{item.quantity} {item.unit}</p>
+                        <p className="font-medium">
+                          {item.quantity} {item.unit}
+                        </p>
                       </div>
                       <div>
                         <span className="text-gray-500">Expiry:</span>
@@ -364,11 +370,7 @@ export default function ShelfCard({
                           name="_action"
                           value="deleteItem"
                         />
-                        <input
-                          type="hidden"
-                          name="itemId"
-                          value={item.id}
-                        />
+                        <input type="hidden" name="itemId" value={item.id} />
                         <Button
                           type="submit"
                           variant="danger"

@@ -14,7 +14,10 @@ export function Welcome() {
           <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-red-200 rounded-full mix-blend-multiply filter blur-3xl"></div>
         </div>
 
-        <Container size="2xl" className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-32">
+        <Container
+          size="2xl"
+          className="relative py-12 sm:py-16 md:py-20 lg:py-24 xl:py-32"
+        >
           {/* Logo
           <div className="text-center mb-12">
             <div className="inline-block w-32 sm:w-40 mb-8">
@@ -34,9 +37,7 @@ export function Welcome() {
           {/* Main Heading */}
           <div className="text-center mb-8 px-4">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
-              <p className="text-orange-600">
-                Savvy Tech Team
-              </p>
+              <p className="text-orange-600">Savvy Tech Team</p>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-700 max-w-2xl mx-auto mb-6 sm:mb-8 px-4">
               Organize, discover, and master your favorite recipes. Keep your

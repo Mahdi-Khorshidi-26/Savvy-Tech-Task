@@ -205,7 +205,7 @@ export default function Pantry() {
         items: [],
         isOptimistic: true,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
       setOptimisticShelves((prev) => [...prev, newOptimisticShelf]);
     }
@@ -267,14 +267,21 @@ export default function Pantry() {
   );
 
   return (
-    <Container as="div" size="2xl" py="md" className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
+    <Container
+      as="div"
+      size="2xl"
+      py="md"
+      className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8"
+    >
       <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">🛒 My Pantry</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+            🛒 My Pantry
+          </h1>
           <p className="text-gray-600 mt-2">Total Items: {totalItems}</p>
         </div>
       </div>
-      
+
       <div className="mb-6 sm:mb-8">
         <Form onSubmit={handleSubmit(onSubmit)} className="w-full">
           <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
@@ -326,7 +333,7 @@ export default function Pantry() {
           </div>
         </Form>
       </div>
-      
+
       <div className="mb-6">
         {/* a button for creating a shelf in here  */}
         <createShelfFetcher.Form method="post">
@@ -350,7 +357,7 @@ export default function Pantry() {
           />
         )}
       </div>
-      
+
       <div className="space-y-4 sm:space-y-6">
         {shelves.map((shelf: OptimisticShelf) => {
           const isDeletingShelf =
