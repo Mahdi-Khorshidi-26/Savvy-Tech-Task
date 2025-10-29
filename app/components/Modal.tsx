@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 
 interface ModalProps {
@@ -16,18 +16,20 @@ export default function Modal({
   children,
   size = "md",
 }: ModalProps) {
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    const modal = modalRef.current;
-    if (!modal) return;
-
     if (isOpen) {
-      modal.showModal();
+      setShouldRender(true);
       document.body.style.overflow = "hidden";
+      setTimeout(() => setIsVisible(true), 10);
+      setTimeout(() => modalRef.current?.focus(), 100);
     } else {
-      modal.close();
+      setIsVisible(false);
       document.body.style.overflow = "unset";
+      setTimeout(() => setShouldRender(false), 200);
     }
 
     return () => {
@@ -35,15 +37,24 @@ export default function Modal({
     };
   }, [isOpen]);
 
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const isInDialog =
-      rect.top <= e.clientY &&
-      e.clientY <= rect.top + rect.height &&
-      rect.left <= e.clientX &&
-      e.clientX <= rect.left + rect.width;
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
 
-    if (!isInDialog) {
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen, onClose]);
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
       onClose();
     }
   };
@@ -55,29 +66,47 @@ export default function Modal({
     xl: "max-w-4xl",
   };
 
+  if (!shouldRender) return null;
+
   return (
-    <dialog
-      ref={modalRef}
-      onClick={handleBackdropClick}
-      className="backdrop:bg-black backdrop:bg-opacity-50 bg-transparent"
-      onKeyDown={(e) => {
-        if (e.key === "Escape") {
-          onClose();
-        }
-      }}
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-200 ease-in-out ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
     >
+      {/* Backdrop */}
       <div
-        className={`bg-white rounded-lg shadow-xl w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden`}
+        className={`fixed inset-0 bg-black transition-opacity duration-200 ease-in-out ${
+          isVisible ? "opacity-50" : "opacity-0"
+        }`}
+        onClick={handleBackdropClick}
+        aria-hidden="true"
+      />
+
+      {/* Modal Content */}
+      <div
+        ref={modalRef}
+        className={`relative bg-white rounded-lg shadow-xl w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden transform transition-all duration-200 ease-in-out ${
+          isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+        }`}
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+          <h2 id="modal-title" className="text-xl font-semibold text-gray-900">
+            {title}
+          </h2>
           <Button
             type="button"
             variant="ghost"
             size="sm"
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
+            aria-label="Close modal"
           >
             ✕
           </Button>
@@ -88,6 +117,6 @@ export default function Modal({
           {children}
         </div>
       </div>
-    </dialog>
+    </div>
   );
 }
