@@ -1,5 +1,6 @@
 import type { Route } from "./+types/app";
 import { isRouteErrorResponse, Link, Outlet } from "react-router";
+import Container from "../components/Container";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -29,7 +30,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="min-h-screen pt-20 p-4 container mx-auto flex flex-col justify-center items-center">
+    <Container
+      as="main"
+      className="min-h-screen pt-20 flex flex-col justify-center items-center"
+      py="lg"
+    >
       <div className="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-8 max-w-md w-full">
         <h1 className="text-4xl font-bold text-blue-600 mb-2">{message}</h1>
         <p className="text-gray-700 mb-6">{details}</p>
@@ -45,6 +50,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
           <code>{stack}</code>
         </pre>
       )}
-    </main>
+    </Container>
   );
 }

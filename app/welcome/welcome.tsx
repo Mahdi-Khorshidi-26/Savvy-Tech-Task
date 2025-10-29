@@ -65,7 +65,6 @@ export function Welcome() {
                 />
               </svg>
             </Link>
-        
           </div>
         </Container>
       </div>
@@ -134,7 +133,7 @@ export function Welcome() {
       <footer className="bg-gray-900 dark:bg-black text-gray-400 py-8">
         <Container size="2xl" className="text-center">
           <p className="text-sm">
-            Made with <span className="text-red-500">❤️</span>by Mahdi Khorshidi
+            Made with<span className="text-red-500">❤️</span>by Mahdi Khorshidi
             for Savvy Tech Team
           </p>
         </Container>

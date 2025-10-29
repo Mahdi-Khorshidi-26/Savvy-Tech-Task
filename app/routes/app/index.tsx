@@ -30,8 +30,6 @@ import { itemIdSchema, saveShelfNameSchema, shelfIdSchema } from "./validation";
 import type { OptimisticShelf, PantryItem, PantrySelf } from "./types";
 import ShelfCard from "./components/shelfCard";
 
-
-
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Pantry - Recipe App" },
@@ -269,209 +267,207 @@ export default function Pantry() {
   return (
     <Container as="div" size="2xl" py="lg" className="min-h-screen bg-gray-50">
       <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900">🛒 My Pantry</h1>
-            <p className="text-gray-600 mt-2">Total Items: {totalItems}</p>
-          </div>
-          <Link
-            to="/app"
-            className="text-blue-600 hover:text-blue-700 font-medium"
-          >
-            ← Back to Dashboard
-          </Link>
+        <div>
+          <h1 className="text-4xl font-bold text-gray-900">🛒 My Pantry</h1>
+          <p className="text-gray-600 mt-2">Total Items: {totalItems}</p>
         </div>
-        <div className="mb-8">
-          <Form onSubmit={handleSubmit(onSubmit)} className="w-full">
-            <div className="flex gap-3 items-center">
-              <div className="relative flex-1 group">
-                <input
-                  type="text"
-                  placeholder="Search pantry items..."
-                  {...register("q")}
-                  className={`w-full px-6 py-3 pl-12 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 ${isSearching ? "opacity-50 cursor-not-allowed animate-pulse" : ""}`}
-                  disabled={isSearching}
-                />
-                <svg
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-                <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-blue-600 rounded-lg opacity-0 group-focus-within:opacity-5 transition-opacity duration-300 pointer-events-none" />
-              </div>
-              <Button
-                type="submit"
-                variant="primary"
-                size="md"
-                isLoading={isSearching}
+        <Link
+          to="/app"
+          className="text-blue-600 hover:text-blue-700 font-medium"
+        >
+          ← Back to Dashboard
+        </Link>
+      </div>
+      <div className="mb-8">
+        <Form onSubmit={handleSubmit(onSubmit)} className="w-full">
+          <div className="flex gap-3 items-center">
+            <div className="relative flex-1 group">
+              <input
+                type="text"
+                placeholder="Search pantry items..."
+                {...register("q")}
+                className={`w-full px-6 py-3 pl-12 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 ${isSearching ? "opacity-50 cursor-not-allowed animate-pulse" : ""}`}
+                disabled={isSearching}
+              />
+              <svg
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                Search
-              </Button>
-              {searchQuery && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="md"
-                  onClick={handleReset}
-                >
-                  Reset
-                </Button>
-              )}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-blue-600 rounded-lg opacity-0 group-focus-within:opacity-5 transition-opacity duration-300 pointer-events-none" />
             </div>
-          </Form>
-        </div>
-        <div className="mb-6">
-          {/* a button for creating a shelf in here  */}
-          <createShelfFetcher.Form method="post">
             <Button
               type="submit"
-              variant="success"
+              variant="primary"
               size="md"
-              value="createShelf"
-              name="_action"
-              isLoading={isCreatingShelf}
+              isLoading={isSearching}
             >
-              + Add New Shelf
+              Search
             </Button>
-          </createShelfFetcher.Form>
-          {createShelfFetcher.data?.errors?.general && (
-            <ErrorMessage
-              variant="error"
-              size="sm"
-              message={createShelfFetcher.data.errors.general}
-            />
-          )}
-        </div>
-        {totalItems === 0 ? (
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <div className="flex flex-col items-center justify-center py-12">
-              <p className="text-2xl text-gray-400 mb-4">📋</p>
-              <p className="text-xl font-semibold text-gray-600 mb-2">
-                No ingredients yet
-              </p>
-              <p className="text-gray-500 mb-6">
-                Add your first ingredient to get started
-              </p>
-              <Button variant="primary" size="md">
-                Add Ingredient
+            {searchQuery && (
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                onClick={handleReset}
+              >
+                Reset
               </Button>
-            </div>
+            )}
           </div>
-        ) : (
-          <>
-            {/* Pantry Shelves */}
-            <div className="space-y-6">
-              {shelves.map((shelf: OptimisticShelf) => {
-                const isDeletingShelf =
-                  deleteShelfFetcher.state === "submitting" &&
-                  deleteShelfFetcher.formData?.get("shelfId") === shelf.id;
-                return (
-                  <ShelfCard
-                    key={shelf.id}
-                    shelf={shelf}
-                    isDeletingShelf={isDeletingShelf}
-                    deleteShelfFetcher={deleteShelfFetcher}
-                  />
-                );
-              })}
+        </Form>
+      </div>
+      <div className="mb-6">
+        {/* a button for creating a shelf in here  */}
+        <createShelfFetcher.Form method="post">
+          <Button
+            type="submit"
+            variant="success"
+            size="md"
+            value="createShelf"
+            name="_action"
+            isLoading={isCreatingShelf}
+          >
+            + Add New Shelf
+          </Button>
+        </createShelfFetcher.Form>
+        {createShelfFetcher.data?.errors?.general && (
+          <ErrorMessage
+            variant="error"
+            size="sm"
+            message={createShelfFetcher.data.errors.general}
+          />
+        )}
+      </div>
+      {totalItems === 0 ? (
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="flex flex-col items-center justify-center py-12">
+            <p className="text-2xl text-gray-400 mb-4">📋</p>
+            <p className="text-xl font-semibold text-gray-600 mb-2">
+              No ingredients yet
+            </p>
+            <p className="text-gray-500 mb-6">
+              Add your first ingredient to get started
+            </p>
+            <Button variant="primary" size="md">
+              Add Ingredient
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* Pantry Shelves */}
+          <div className="space-y-6">
+            {shelves.map((shelf: OptimisticShelf) => {
+              const isDeletingShelf =
+                deleteShelfFetcher.state === "submitting" &&
+                deleteShelfFetcher.formData?.get("shelfId") === shelf.id;
+              return (
+                <ShelfCard
+                  key={shelf.id}
+                  shelf={shelf}
+                  isDeletingShelf={isDeletingShelf}
+                  deleteShelfFetcher={deleteShelfFetcher}
+                />
+              );
+            })}
+          </div>
+          {/* Summary Section */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">
+                Categories
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => {
+                  const count = shelves.reduce(
+                    (sum: number, shelf: OptimisticShelf) =>
+                      sum +
+                      shelf.items.filter(
+                        (item: PantryItem) => item.category === category
+                      ).length,
+                    0
+                  );
+                  return (
+                    <span
+                      key={category as string}
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+                    >
+                      {category as string} ({count})
+                    </span>
+                  );
+                })}
+              </div>
             </div>
-            {/* Summary Section */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">
-                  Categories
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((category) => {
-                    const count = shelves.reduce(
+
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">
+                Expiry Status
+              </h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">🚨 Expired:</span>
+                  <span className="font-bold text-red-600">
+                    {shelves.reduce(
                       (sum: number, shelf: OptimisticShelf) =>
                         sum +
                         shelf.items.filter(
-                          (item: PantryItem) => item.category === category
+                          (item: PantryItem) =>
+                            item.expiryDate &&
+                            new Date(item.expiryDate) < new Date()
                         ).length,
                       0
-                    );
-                    return (
-                      <span
-                        key={category as string}
-                        className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
-                      >
-                        {category as string} ({count})
-                      </span>
-                    );
-                  })}
+                    )}
+                  </span>
                 </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-4">
-                  Expiry Status
-                </h3>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">🚨 Expired:</span>
-                    <span className="font-bold text-red-600">
-                      {shelves.reduce(
-                        (sum: number, shelf: OptimisticShelf) =>
-                          sum +
-                          shelf.items.filter(
-                            (item: PantryItem) =>
-                              item.expiryDate &&
-                              new Date(item.expiryDate) < new Date()
-                          ).length,
-                        0
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">
-                      ⚠️ Expiring Soon (7 days):
-                    </span>
-                    <span className="font-bold text-yellow-600">
-                      {shelves.reduce(
-                        (sum: number, shelf: OptimisticShelf) =>
-                          sum +
-                          shelf.items.filter(
-                            (item: PantryItem) =>
-                              item.expiryDate &&
-                              new Date(item.expiryDate) <
-                                new Date(
-                                  Date.now() + 7 * 24 * 60 * 60 * 1000
-                                ) &&
-                              new Date(item.expiryDate) >= new Date()
-                          ).length,
-                        0
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600">✅ Good:</span>
-                    <span className="font-bold text-green-600">
-                      {shelves.reduce(
-                        (sum: number, shelf: OptimisticShelf) =>
-                          sum +
-                          shelf.items.filter(
-                            (item: PantryItem) =>
-                              !item.expiryDate ||
-                              new Date(item.expiryDate) >=
-                                new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                          ).length,
-                        0
-                      )}
-                    </span>
-                  </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">
+                    ⚠️ Expiring Soon (7 days):
+                  </span>
+                  <span className="font-bold text-yellow-600">
+                    {shelves.reduce(
+                      (sum: number, shelf: OptimisticShelf) =>
+                        sum +
+                        shelf.items.filter(
+                          (item: PantryItem) =>
+                            item.expiryDate &&
+                            new Date(item.expiryDate) <
+                              new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) &&
+                            new Date(item.expiryDate) >= new Date()
+                        ).length,
+                      0
+                    )}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">✅ Good:</span>
+                  <span className="font-bold text-green-600">
+                    {shelves.reduce(
+                      (sum: number, shelf: OptimisticShelf) =>
+                        sum +
+                        shelf.items.filter(
+                          (item: PantryItem) =>
+                            !item.expiryDate ||
+                            new Date(item.expiryDate) >=
+                              new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+                        ).length,
+                      0
+                    )}
+                  </span>
                 </div>
               </div>
             </div>
-          </>
-        )}
+          </div>
+        </>
+      )}
     </Container>
   );
 }
@@ -493,8 +489,8 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <Container 
-      as="main" 
+    <Container
+      as="main"
       className="min-h-screen pt-20 flex flex-col justify-center items-center"
       py="lg"
     >

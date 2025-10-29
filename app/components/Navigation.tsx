@@ -109,7 +109,10 @@ export function Navigation() {
       <nav
         className={`sticky top-0 z-50 bg-white shadow-md transition-all duration-200 ${isLoading ? "opacity-75" : "opacity-100"}`}
       >
-        <Container size="2xl" className="py-4 flex items-center justify-between gap-8">
+        <Container
+          size="2xl"
+          className="py-4 flex items-center justify-between gap-8"
+        >
           {/* Logo */}
           <Link
             to="/"

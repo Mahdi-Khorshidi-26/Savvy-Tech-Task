@@ -35,8 +35,8 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <Container 
-      as="main" 
+    <Container
+      as="main"
       className="min-h-screen pt-20 flex flex-col justify-center items-center"
       py="lg"
     >
