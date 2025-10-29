@@ -191,7 +191,7 @@ export default function Pantry() {
 
   const handleReset = () => {
     reset({ q: "" });
-    navigate("/app/pantry");
+    navigate("/app");
   };
 
   // Handle optimistic create shelf
