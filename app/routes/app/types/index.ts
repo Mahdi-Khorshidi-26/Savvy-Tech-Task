@@ -7,6 +7,8 @@ export interface PantryItem {
   expiryDate: Date | null;
   notes: string | null;
   pantrySelfId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface PantrySelf {
@@ -15,6 +17,8 @@ export interface PantrySelf {
   type: string;
   order: number;
   items: PantryItem[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface OptimisticShelf extends PantrySelf {

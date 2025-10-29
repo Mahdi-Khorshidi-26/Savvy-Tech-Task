@@ -80,6 +80,7 @@ export default function ShelfCard({
                 }
               }}
             />
+
             <Button
               type="submit"
               variant="ghost"
@@ -91,6 +92,7 @@ export default function ShelfCard({
               💾
             </Button>
           </saveShelfFetcher.Form>
+          <p>Created at: {shelf.createdAt.toLocaleDateString()}</p>
           {saveShelfFetcher.data?.errors?.shelfName && (
             <ErrorMessage
               variant="error"
@@ -397,6 +399,9 @@ export default function ShelfCard({
                         <td className="px-6 py-4">
                           <p className="font-medium text-gray-900">
                             {item.name}
+                          </p>
+                          <p>
+                            Created at: {item.createdAt.toLocaleDateString()}
                           </p>
                         </td>
                         <td className="px-6 py-4">

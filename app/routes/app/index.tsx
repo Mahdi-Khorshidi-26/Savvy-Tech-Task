@@ -204,6 +204,8 @@ export default function Pantry() {
         order: 0,
         items: [],
         isOptimistic: true,
+        createdAt: new Date(),
+        updatedAt: new Date()
       };
       setOptimisticShelves((prev) => [...prev, newOptimisticShelf]);
     }
