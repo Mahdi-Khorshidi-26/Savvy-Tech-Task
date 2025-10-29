@@ -35,8 +35,8 @@ export default function ShelfCard({
         isDeletingShelf ? "opacity-50" : "opacity-100"
       }`}
     >
-      <div className="flex justify-between items-center bg-linear-to-r from-blue-500 to-blue-600 px-6 py-4">
-        <div>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gradient-to-r from-blue-500 to-blue-600 px-4 sm:px-6 py-4">
+        <div className="flex-1 min-w-0">
           <saveShelfFetcher.Form method="post" className="mt-2">
             <input type="hidden" name="shelfId" value={shelf.id} />
             <input
@@ -44,7 +44,7 @@ export default function ShelfCard({
               name="shelfName"
               placeholder="Shelf Name"
               defaultValue={shelf.name}
-              className={`mb-2 rounded border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl font-bold text-white ${
+              className={`mb-2 rounded border-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl sm:text-2xl font-bold text-white bg-transparent placeholder-white/70 w-full ${
                 isShelfSaving ? "opacity-60 cursor-not-allowed" : ""
               }`}
               disabled={isShelfSaving}
@@ -62,15 +62,16 @@ export default function ShelfCard({
             <Button
               type="submit"
               variant="ghost"
-              size="md"
+              size="sm"
               value="saveShelf"
               name="_action"
               isLoading={isShelfSaving}
+              className="text-white hover:bg-white/20"
             >
               💾
             </Button>
           </saveShelfFetcher.Form>
-          <p>Created at: {shelf.createdAt.toLocaleDateString()}</p>
+          <p className="text-white/90 text-sm">Created at: {shelf.createdAt.toLocaleDateString()}</p>
           {saveShelfFetcher.data?.errors?.shelfName && (
             <ErrorMessage
               variant="error"
@@ -83,20 +84,22 @@ export default function ShelfCard({
             {shelf.isOptimistic && " (saving...)"}
           </p>
         </div>
-        <deleteShelfFetcher.Form method="post">
-          <input type="hidden" name="shelfId" value={shelf.id} />
-          <input type="hidden" name="shelfName" value={shelf.name} />
-          <Button
-            type="submit"
-            variant="danger"
-            size="md"
-            value="deleteShelf"
-            name="_action"
-            isLoading={isDeletingShelf}
-          >
-            🗑️ Delete Shelf
-          </Button>
-        </deleteShelfFetcher.Form>
+        <div className="mt-3 sm:mt-0 sm:ml-4">
+          <deleteShelfFetcher.Form method="post">
+            <input type="hidden" name="shelfId" value={shelf.id} />
+            <input type="hidden" name="shelfName" value={shelf.name} />
+            <Button
+              type="submit"
+              variant="danger"
+              size="sm"
+              value="deleteShelf"
+              name="_action"
+              isLoading={isDeletingShelf}
+            >
+              🗑️ <span className="hidden sm:inline">Delete Shelf</span>
+            </Button>
+          </deleteShelfFetcher.Form>
+        </div>
       </div>
       {deleteShelfFetcher.state === "idle" &&
         deleteShelfFetcher.formData &&
@@ -113,7 +116,7 @@ export default function ShelfCard({
             }
           />
         )}
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {shelf.items.length === 0 ? (
           <div className="text-center text-gray-500 py-6">
             <p>No items in this shelf yet</p>
@@ -139,7 +142,9 @@ export default function ShelfCard({
                 + Add Item
               </Button>
             </div>
-            <div className="overflow-x-auto">
+            
+            {/* Desktop Table View */}
+            <div className="hidden lg:block overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-gray-100 border-b">
                   <tr>
@@ -194,7 +199,7 @@ export default function ShelfCard({
                           <p className="font-medium text-gray-900">
                             {item.name}
                           </p>
-                          <p>
+                          <p className="text-sm text-gray-500">
                             Created at: {item.createdAt.toLocaleDateString()}
                           </p>
                         </td>
@@ -266,6 +271,117 @@ export default function ShelfCard({
                   })}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="lg:hidden space-y-4">
+              {shelf.items.map((item: PantryItem) => {
+                const isExpired =
+                  item.expiryDate && new Date(item.expiryDate) < new Date();
+                const isExpiringSoon =
+                  item.expiryDate &&
+                  new Date(item.expiryDate) <
+                    new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) &&
+                  !isExpired;
+
+                const isDeletingItem =
+                  deleteItemFetcher.state === "submitting" &&
+                  deleteItemFetcher.formData?.get("itemId") === item.id;
+
+                return (
+                  <div
+                    key={item.id}
+                    className={`bg-white border rounded-lg p-4 shadow-sm ${
+                      isExpired
+                        ? "border-red-200 bg-red-50"
+                        : isExpiringSoon
+                          ? "border-yellow-200 bg-yellow-50"
+                          : isDeletingItem
+                            ? "opacity-50"
+                            : "border-gray-200"
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-gray-900 text-lg">{item.name}</h4>
+                        <p className="text-sm text-gray-500">
+                          Created: {item.createdAt.toLocaleDateString()}
+                        </p>
+                      </div>
+                      <span className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium ml-3">
+                        {item.category}
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3 mb-3 text-sm">
+                      <div>
+                        <span className="text-gray-500">Quantity:</span>
+                        <p className="font-medium">{item.quantity} {item.unit}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Expiry:</span>
+                        {item.expiryDate ? (
+                          <p
+                            className={`font-medium ${
+                              isExpired
+                                ? "text-red-600"
+                                : isExpiringSoon
+                                  ? "text-yellow-600"
+                                  : "text-gray-700"
+                            }`}
+                          >
+                            {isExpired && "🚨 "}
+                            {isExpiringSoon && "⚠️ "}
+                            {new Date(item.expiryDate).toLocaleDateString()}
+                          </p>
+                        ) : (
+                          <p className="text-gray-500">-</p>
+                        )}
+                      </div>
+                    </div>
+
+                    {item.notes && (
+                      <div className="mb-3">
+                        <span className="text-gray-500 text-sm">Notes:</span>
+                        <p className="text-sm text-gray-700">{item.notes}</p>
+                      </div>
+                    )}
+
+                    <div className="flex gap-2 pt-2 border-t border-gray-100">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setEditingItem(item)}
+                        disabled={isDeletingItem}
+                        className="flex-1"
+                      >
+                        ✏️ Edit
+                      </Button>
+                      <deleteItemFetcher.Form method="post">
+                        <input
+                          type="hidden"
+                          name="_action"
+                          value="deleteItem"
+                        />
+                        <input
+                          type="hidden"
+                          name="itemId"
+                          value={item.id}
+                        />
+                        <Button
+                          type="submit"
+                          variant="danger"
+                          size="sm"
+                          isLoading={isDeletingItem}
+                        >
+                          🗑️
+                        </Button>
+                      </deleteItemFetcher.Form>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

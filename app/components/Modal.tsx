@@ -70,7 +70,7 @@ export default function Modal({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-200 ease-in-out ${
+      className={`fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 transition-opacity duration-200 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       role="dialog"
@@ -89,15 +89,15 @@ export default function Modal({
       {/* Modal Content */}
       <div
         ref={modalRef}
-        className={`relative bg-white rounded-lg shadow-xl w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden transform transition-all duration-200 ease-in-out ${
+        className={`relative bg-white rounded-lg shadow-xl w-full ${sizeClasses[size]} max-h-[95vh] sm:max-h-[90vh] overflow-hidden transform transition-all duration-200 ease-in-out ${
           isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
         }`}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 bg-gray-50">
-          <h2 id="modal-title" className="text-xl font-semibold text-gray-900">
+        <div className="flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 bg-gray-50">
+          <h2 id="modal-title" className="text-lg sm:text-xl font-semibold text-gray-900">
             {title}
           </h2>
           <Button
@@ -105,7 +105,7 @@ export default function Modal({
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 hover:text-gray-600 p-1"
             aria-label="Close modal"
           >
             ✕
@@ -113,7 +113,7 @@ export default function Modal({
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+        <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(95vh-120px)] sm:max-h-[calc(90vh-120px)]">
           {children}
         </div>
       </div>

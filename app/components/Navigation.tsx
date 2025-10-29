@@ -111,18 +111,19 @@ export function Navigation() {
       >
         <Container
           size="2xl"
-          className="py-4 flex items-center justify-between gap-8"
+          className="py-3 sm:py-4 flex items-center justify-between gap-4 sm:gap-8"
         >
           {/* Logo */}
           <Link
             to="/"
-            className="text-2xl font-bold text-gray-800 hover:text-red-600 transition-colors"
+            className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 hover:text-red-600 transition-colors flex-shrink-0"
           >
-            Savvy Tech Team Task
+            <span className="hidden sm:inline">Savvy Tech Team Task</span>
+            <span className="sm:hidden">Savvy Tech</span>
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex gap-8">
+          <div className="hidden lg:flex gap-6 xl:gap-8">
             {navItems.map((item) => (
               <Link
                 key={item.path}
@@ -174,7 +175,7 @@ export function Navigation() {
       </div>
 
       <aside
-        className={`fixed left-0 top-0 h-screen w-64 bg-white shadow-lg z-40 transform transition-transform duration-300 ${
+        className={`fixed left-0 top-0 h-screen w-64 sm:w-72 bg-white shadow-lg z-40 transform transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } ${isLoading ? "opacity-75" : "opacity-100"}`}
       >
@@ -182,7 +183,7 @@ export function Navigation() {
         <div className="flex items-center justify-between p-4 border-b">
           <Link
             to="/"
-            className="text-xl font-bold text-gray-800 hover:text-red-600 transition-colors"
+            className="text-lg sm:text-xl font-bold text-gray-800 hover:text-red-600 transition-colors"
           >
             Recipe App
           </Link>
@@ -204,7 +205,7 @@ export function Navigation() {
                 <Link
                   to={item.path}
                   onClick={closeMenu}
-                  className={`block px-4 py-3 rounded-lg font-medium transition-all ${
+                  className={`block px-4 py-3 rounded-lg font-medium transition-all text-sm sm:text-base ${
                     isLoading
                       ? "pointer-events-none cursor-not-allowed opacity-60"
                       : "cursor-pointer"

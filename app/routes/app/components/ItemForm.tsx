@@ -40,8 +40,8 @@ export default function ItemForm({
         <input type="hidden" name="id" value={item.id} />
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="sm:col-span-2">
           <label
             htmlFor="name"
             className="block text-sm font-medium text-gray-700 mb-1"
@@ -79,6 +79,24 @@ export default function ItemForm({
 
         <div>
           <label
+            htmlFor="unit"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Unit <span className="text-red-500">*</span>
+          </label>
+          <input
+            id="unit"
+            type="text"
+            name="unit"
+            placeholder="ml, g, pieces, etc."
+            defaultValue={item?.unit || ""}
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label
             htmlFor="quantity"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
@@ -93,24 +111,6 @@ export default function ItemForm({
             required
             min="1"
             step="0.01"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="unit"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Unit <span className="text-red-500">*</span>
-          </label>
-          <input
-            id="unit"
-            type="text"
-            name="unit"
-            placeholder="ml, g, pieces, etc."
-            defaultValue={item?.unit || ""}
-            required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
@@ -135,20 +135,20 @@ export default function ItemForm({
           />
         </div>
 
-        <div>
+        <div className="sm:col-span-2">
           <label
             htmlFor="notes"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
             Notes
           </label>
-          <input
+          <textarea
             id="notes"
-            type="text"
             name="notes"
             placeholder="Additional notes (optional)"
             defaultValue={item?.notes || ""}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
           />
         </div>
       </div>
@@ -161,13 +161,13 @@ export default function ItemForm({
         />
       )}
 
-      <div className="flex gap-3 pt-4 border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
         <Button
           type="submit"
           variant="primary"
           size="md"
           isLoading={isSubmitting}
-          className="flex-1"
+          className="flex-1 order-2 sm:order-1"
         >
           {mode === "add" ? "Add Item" : "Save Changes"}
         </Button>
@@ -177,7 +177,7 @@ export default function ItemForm({
           size="md"
           onClick={onCancel}
           disabled={isSubmitting}
-          className="flex-1"
+          className="flex-1 order-1 sm:order-2"
         >
           Cancel
         </Button>

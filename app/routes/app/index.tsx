@@ -267,26 +267,27 @@ export default function Pantry() {
   );
 
   return (
-    <Container as="div" size="2xl" py="lg" className="min-h-screen bg-gray-50">
-      <div className="mb-8 flex items-center justify-between">
+    <Container as="div" size="2xl" py="md" className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8">
+      <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold text-gray-900">🛒 My Pantry</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">🛒 My Pantry</h1>
           <p className="text-gray-600 mt-2">Total Items: {totalItems}</p>
         </div>
       </div>
-      <div className="mb-8">
+      
+      <div className="mb-6 sm:mb-8">
         <Form onSubmit={handleSubmit(onSubmit)} className="w-full">
-          <div className="flex gap-3 items-center">
+          <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
             <div className="relative flex-1 group">
               <input
                 type="text"
                 placeholder="Search pantry items..."
                 {...register("q")}
-                className={`w-full px-6 py-3 pl-12 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 ${isSearching ? "opacity-50 cursor-not-allowed animate-pulse" : ""}`}
+                className={`w-full px-4 sm:px-6 py-3 pl-10 sm:pl-12 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:shadow-lg transition-all duration-300 bg-white text-gray-900 placeholder-gray-400 text-sm sm:text-base ${isSearching ? "opacity-50 cursor-not-allowed animate-pulse" : ""}`}
                 disabled={isSearching}
               />
               <svg
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300"
+                className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -298,29 +299,34 @@ export default function Pantry() {
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-              <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-blue-600 rounded-lg opacity-0 group-focus-within:opacity-5 transition-opacity duration-300 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg opacity-0 group-focus-within:opacity-5 transition-opacity duration-300 pointer-events-none" />
             </div>
-            <Button
-              type="submit"
-              variant="primary"
-              size="md"
-              isLoading={isSearching}
-            >
-              Search
-            </Button>
-            {searchQuery && (
+            <div className="flex gap-3">
               <Button
-                type="button"
-                variant="outline"
+                type="submit"
+                variant="primary"
                 size="md"
-                onClick={handleReset}
+                isLoading={isSearching}
+                className="flex-1 sm:flex-none"
               >
-                Reset
+                Search
               </Button>
-            )}
+              {searchQuery && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="md"
+                  onClick={handleReset}
+                  className="flex-1 sm:flex-none"
+                >
+                  Reset
+                </Button>
+              )}
+            </div>
           </div>
         </Form>
       </div>
+      
       <div className="mb-6">
         {/* a button for creating a shelf in here  */}
         <createShelfFetcher.Form method="post">
@@ -331,6 +337,7 @@ export default function Pantry() {
             value="createShelf"
             name="_action"
             isLoading={isCreatingShelf}
+            className="w-full sm:w-auto"
           >
             + Add New Shelf
           </Button>
@@ -343,7 +350,8 @@ export default function Pantry() {
           />
         )}
       </div>
-      <div className="space-y-6">
+      
+      <div className="space-y-4 sm:space-y-6">
         {shelves.map((shelf: OptimisticShelf) => {
           const isDeletingShelf =
             deleteShelfFetcher.state === "submitting" &&
