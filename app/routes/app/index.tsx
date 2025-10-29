@@ -271,12 +271,6 @@ export default function Pantry() {
           <h1 className="text-4xl font-bold text-gray-900">🛒 My Pantry</h1>
           <p className="text-gray-600 mt-2">Total Items: {totalItems}</p>
         </div>
-        <Link
-          to="/app"
-          className="text-blue-600 hover:text-blue-700 font-medium"
-        >
-          ← Back to Dashboard
-        </Link>
       </div>
       <div className="mb-8">
         <Form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -347,127 +341,21 @@ export default function Pantry() {
           />
         )}
       </div>
-      {totalItems === 0 ? (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <div className="flex flex-col items-center justify-center py-12">
-            <p className="text-2xl text-gray-400 mb-4">📋</p>
-            <p className="text-xl font-semibold text-gray-600 mb-2">
-              No ingredients yet
-            </p>
-            <p className="text-gray-500 mb-6">
-              Add your first ingredient to get started
-            </p>
-            <Button variant="primary" size="md">
-              Add Ingredient
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <>
-          {/* Pantry Shelves */}
-          <div className="space-y-6">
-            {shelves.map((shelf: OptimisticShelf) => {
-              const isDeletingShelf =
-                deleteShelfFetcher.state === "submitting" &&
-                deleteShelfFetcher.formData?.get("shelfId") === shelf.id;
-              return (
-                <ShelfCard
-                  key={shelf.id}
-                  shelf={shelf}
-                  isDeletingShelf={isDeletingShelf}
-                  deleteShelfFetcher={deleteShelfFetcher}
-                />
-              );
-            })}
-          </div>
-          {/* Summary Section */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Categories
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {categories.map((category) => {
-                  const count = shelves.reduce(
-                    (sum: number, shelf: OptimisticShelf) =>
-                      sum +
-                      shelf.items.filter(
-                        (item: PantryItem) => item.category === category
-                      ).length,
-                    0
-                  );
-                  return (
-                    <span
-                      key={category as string}
-                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
-                    >
-                      {category as string} ({count})
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Expiry Status
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">🚨 Expired:</span>
-                  <span className="font-bold text-red-600">
-                    {shelves.reduce(
-                      (sum: number, shelf: OptimisticShelf) =>
-                        sum +
-                        shelf.items.filter(
-                          (item: PantryItem) =>
-                            item.expiryDate &&
-                            new Date(item.expiryDate) < new Date()
-                        ).length,
-                      0
-                    )}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">
-                    ⚠️ Expiring Soon (7 days):
-                  </span>
-                  <span className="font-bold text-yellow-600">
-                    {shelves.reduce(
-                      (sum: number, shelf: OptimisticShelf) =>
-                        sum +
-                        shelf.items.filter(
-                          (item: PantryItem) =>
-                            item.expiryDate &&
-                            new Date(item.expiryDate) <
-                              new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) &&
-                            new Date(item.expiryDate) >= new Date()
-                        ).length,
-                      0
-                    )}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">✅ Good:</span>
-                  <span className="font-bold text-green-600">
-                    {shelves.reduce(
-                      (sum: number, shelf: OptimisticShelf) =>
-                        sum +
-                        shelf.items.filter(
-                          (item: PantryItem) =>
-                            !item.expiryDate ||
-                            new Date(item.expiryDate) >=
-                              new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-                        ).length,
-                      0
-                    )}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+      <div className="space-y-6">
+        {shelves.map((shelf: OptimisticShelf) => {
+          const isDeletingShelf =
+            deleteShelfFetcher.state === "submitting" &&
+            deleteShelfFetcher.formData?.get("shelfId") === shelf.id;
+          return (
+            <ShelfCard
+              key={shelf.id}
+              shelf={shelf}
+              isDeletingShelf={isDeletingShelf}
+              deleteShelfFetcher={deleteShelfFetcher}
+            />
+          );
+        })}
+      </div>
     </Container>
   );
 }
