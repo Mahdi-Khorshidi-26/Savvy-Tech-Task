@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Pantry Shelf - represents a shelf in the user's pantry
+model PantrySelf {
+  id        String   @id @default(cuid())
+  name      String   // e.g., "Fridge", "Freezer", "Spices Cabinet"
+  type      String   // e.g., "fridge", "freezer", "cabinet", "counter"
+  order     Int      @default(0) // For sorting shelves
+
+  // Relations
+  items     PantryItem[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id])
+}
+
+// Pantry Item - individual items stored in pantry shelves
+model PantryItem {
+  id           String   @id @default(cuid())
+  name         String   // e.g., "Milk", "Tomatoes", "Chicken"
+  category     String   // e.g., "Dairy", "Vegetables", "Protein"
+  quantity     Int      @default(1)
+  unit         String   // e.g., "ml", "g", "count", "liters"
+  expiryDate   DateTime? // When the item expires
+  notes        String?  // Additional notes
+
+  // Relations
+  pantrySelfId String
+  pantrySelf   PantrySelf @relation(fields: [pantrySelfId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([pantrySelfId])
+  @@index([category])
+}
